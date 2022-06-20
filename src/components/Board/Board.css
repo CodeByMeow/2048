@@ -1,0 +1,10 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 20vmin);
+  grid-template-rows: repeat(4, 20vmin);
+  gap: 1vmin;
+  padding: 1vmin;
+  background-color: #eee;
+  border-radius: 1vmin;
+  position: relative;
+}

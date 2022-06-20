@@ -1,0 +1,20 @@
+.tile {
+  position: absolute;
+  width: 20vmin;
+  height: 20vmin;
+  background-color: #FF6651;
+  border-radius: inherit;
+  animation: show 200ms ease-in-out;
+  transition: 100ms ease-in-out;
+  left: calc(var(--x) * (20vmin + 1vmin) + 1vmin);
+  top: calc(var(--y) * (20vmin + 1vmin) + 1vmin);
+  background: var(--image);
+  background-size: cover;
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  transform: scale(0);
+}
+}
