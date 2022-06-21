@@ -1,29 +1,56 @@
+import { Component } from 'react';
 import game from './Game';
 import Board from './components/Board';
-import { useEffect, useState } from 'react';
 
-function App() {
-  game.start();
-  const [board, setBoard] = useState(game);
+game.start();
+class App extends Component {
 
-  useEffect(
-    () => {
-      document.addEventListener("keydown", handleKeyDown);
+  state = {
+    cells: game.cells,
+    tiles: game.tiles,
+    transitions: [],
+    score: 0,
+  }
 
-      return () => document.removeEventListener("keydown", handleKeyDown);
-    }, []
-  );
+  componentDidMount = () => {
+    window.addEventListener("keydown", this.handleKeydown);
 
-  return (
-    <Board board={board} />
-  );
+    game.addCallback('addition', (score) => this.setState({ score: score }));
+  }
+
+  componentWillUnmount = () => {
+    window.removeEventListener("keydown", this.handleKeydown);
+
+    game.removeCallback('addition');
+  }
+
+  handleKeydown = (e) => {
+    if (!Object.keys(game.keyMap).includes(e.key)) return;
+    if (game.respond(game.keyMap[e.key])) {
+      this.refreshGameState();
+    }
+  }
+
+  waitForTransition = () => {
+    const waitting = new Promise(resolve => resolve());
+    this.setState({
+      transitions: [...this.state.transitions, waitting],
+    })
+  }
+
+  refreshGameState = () => {
+    this.setState({
+      cells: game.cells,
+      tiles: game.tiles,
+    })
+  }
+
+  render() {
+    const { cells, tiles } = this.state;
+    return (
+      <Board cells={cells} tiles={tiles} waitting={this.waitForTransition} />
+    );
+  }
 }
-
-function handleKeyDown(e) {
-  if (!Object.values(game.keyMap).includes(e.key)) return;
-  
-  
-}
-
 
 export default App;
