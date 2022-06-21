@@ -8,7 +8,6 @@ class App extends Component {
   state = {
     cells: game.cells,
     tiles: game.tiles,
-    transitions: [],
     score: 0,
   }
 
@@ -31,13 +30,6 @@ class App extends Component {
     }
   }
 
-  waitForTransition = () => {
-    const waitting = new Promise(resolve => resolve());
-    this.setState({
-      transitions: [...this.state.transitions, waitting],
-    })
-  }
-
   refreshGameState = () => {
     this.setState({
       cells: game.cells,
@@ -48,7 +40,7 @@ class App extends Component {
   render() {
     const { cells, tiles } = this.state;
     return (
-      <Board cells={cells} tiles={tiles} waitting={this.waitForTransition} />
+      <Board cells={cells} tiles={tiles} />
     );
   }
 }

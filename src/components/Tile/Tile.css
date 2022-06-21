@@ -5,7 +5,6 @@
   background-color: #FF6651;
   border-radius: inherit;
   animation: show 200ms ease-in-out;
-  transition: 100ms ease-in-out;
   left: calc(var(--x) * (20vmin + 1vmin) + 1vmin);
   top: calc(var(--y) * (20vmin + 1vmin) + 1vmin);
   background: var(--image);

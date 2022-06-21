@@ -29,7 +29,7 @@ class Game {
 
     this.addNew();
     this.addNew();
-    this.tiles = this.cells.filter(cell => cell.getTile() != null);
+    this.tiles = this.getTiles();
   }
 
   emptyCell() {
@@ -76,7 +76,9 @@ class Game {
 
   respond(step) {
     if (this.dispatch(step)) {
+      
       this.cells.forEach(cell => cell.mergeTiles());
+
       this.addNew()
       this.tiles = this.getTiles();
       return true;
@@ -121,7 +123,7 @@ class Game {
   }
 
   slideTile(cells) {
-    cells.flatMap(group => {
+    cells.forEach(group => {
       for (let i = 1; i < group.length; i++) {
         const cell = group[i];
         if (cell.getTile() == null) continue;

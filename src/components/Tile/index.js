@@ -1,6 +1,6 @@
 import './Tile.css';
 
-const Tile = ({ cell, waitting }) => {
+const Tile = ({ cell}) => {
   return (
     <div
       className="tile"
@@ -9,7 +9,6 @@ const Tile = ({ cell, waitting }) => {
         "--y": cell.tile.y,
         "--image": `url(images/${cell.tile.value}.gif)`,
       }}
-      onTransitionEnd={() => waitting()}
       
     ></div>
   );
