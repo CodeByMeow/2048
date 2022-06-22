@@ -11,11 +11,14 @@ body {
 }
 
 .container {
-  max-width: 500px;
+  display:flex;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.sidebar {
+  position: relative;
 }
+
 

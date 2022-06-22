@@ -5,7 +5,7 @@
   width: var(--size);
   height: var(--size);
   border-radius: inherit;
-  animation: show 200ms ease-in-out;
+  animation: show 300ms ease-in-out;
   left: calc(var(--x) * (var(--size) + var(--gap)) + var(--gap));
   top: calc(var(--y) * (var(--size) + var(--gap)) + var(--gap));
   background: var(--image);

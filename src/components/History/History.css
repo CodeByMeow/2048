@@ -1,0 +1,31 @@
+.history {
+  width: 400px;
+  height: 100%;
+  background-color: #57407C;
+  position: relative;
+  border-radius: 10px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.history h2 {
+  padding:20px;
+  margin: 0;
+}
+
+.history .history-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.history .history-head {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px;
+  background-color: #3D2963;
+  border-radius: 10px;
+  padding: 15px;
+}

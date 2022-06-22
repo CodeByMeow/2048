@@ -11,6 +11,8 @@ class Game {
     this.callbacks = {};
     this.won = false;
     this.over = false;
+    this.score = 0;
+    this.history = [];
   }
 
   start() {
@@ -32,6 +34,10 @@ class Game {
     this.addNew();
     this.addNew();
     this.tiles = this.getTiles();
+    this.won = false;
+    this.over = false;
+    this.score = 0;
+    this.history = this.loadHistory();
   }
 
   emptyCell() {
@@ -84,8 +90,8 @@ class Game {
       this.tiles = this.getTiles();
       this.score += score;
       this.callbacks['addition'] && this.callbacks['addition'](score);
-      if (this.isWon()) this.callbacks['won'] && this.callbacks['won']();
-      if (this.isOver()) this.callbacks['over'] && this.callbacks['over']();
+      if (this.isWon()) this.callbacks['won'] && this.callbacks['won'](this.score);
+      if (this.isOver()) this.callbacks['over'] && this.callbacks['over'](this.score);
 
       return true;
     }
@@ -178,6 +184,18 @@ class Game {
 
   canMoveDown() {
     return this.canMove(this.cellByCol().map(col => [...col].reverse()));
+  }
+
+  updateToHistory(score) {
+    const date = new Date();
+    const timeGameOver = date.toLocaleString();
+    const data = JSON.parse(localStorage.getItem("history")) || [];
+    data.push({time: timeGameOver, score: score});
+    localStorage.setItem('history', JSON.stringify(data));
+  }
+
+  loadHistory() {
+    return JSON.parse(localStorage.getItem('history')) || [];
   }
 
   canMoveLeft() {

@@ -3,6 +3,7 @@ import game from './Game';
 import Board from './components/Board';
 import Modal from './components/Modal';
 import Header from './components/Header';
+import History from './components/History';
 
 game.start();
 class App extends Component {
@@ -14,17 +15,26 @@ class App extends Component {
     won: false,
     over: false,
     addition: 0,
+    history: game.history,
   }
 
   componentDidMount = () => {
     window.addEventListener("keydown", this.handleKeydown);
 
     game.addCallback('addition', (score) => this.setState({
-      score: this.state.score + score,
+      score: game.score,
       addition: score,
     }));
-    game.addCallback('won', () => this.setState({ won: true }));
-    game.addCallback('over', () => this.setState({ over: true }));
+    
+    game.addCallback('won', (score) => {
+      game.updateToHistory(score);
+      this.setState({ won: true, history: game.loadHistory() });
+    });
+    
+    game.addCallback('over', (score) => {
+      game.updateToHistory(score);
+      this.setState({ over: true, history: game.loadHistory() });
+    });
   }
 
   componentWillUnmount = () => {
@@ -57,15 +67,21 @@ class App extends Component {
       won: false,
       over: false,
       score: 0,
+      history: game.loadHistory(),
     })
   }
 
   render() {
-    const { cells, tiles, won, over, score, addition } = this.state;
+    const { cells, tiles, won, over, score, addition, history } = this.state;
     return (
       <div className='container'>
-        <Header score={score} addition={addition} />
-        <Board cells={cells} tiles={tiles} won={won} over={over} tryAgain={this.tryAgain} />
+        <div className='game-board'>
+          <Header score={score} addition={addition} />
+          <Board cells={cells} tiles={tiles} won={won} over={over} tryAgain={this.tryAgain} />
+        </div>
+        <div className='sidebar'>
+          <History history = {history} />
+        </div>
         {won && <Modal message="You won !!!" tryAgain={this.tryAgain} />}
       </div>
     );
