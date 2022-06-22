@@ -1,12 +1,13 @@
 .tile {
+  --gap: 12px;
+  --size: 87px;
   position: absolute;
-  width: 20vmin;
-  height: 20vmin;
-  background-color: #FF6651;
+  width: var(--size);
+  height: var(--size);
   border-radius: inherit;
   animation: show 200ms ease-in-out;
-  left: calc(var(--x) * (20vmin + 1vmin) + 1vmin);
-  top: calc(var(--y) * (20vmin + 1vmin) + 1vmin);
+  left: calc(var(--x) * (var(--size) + var(--gap)) + var(--gap));
+  top: calc(var(--y) * (var(--size) + var(--gap)) + var(--gap));
   background: var(--image);
   background-size: cover;
 }

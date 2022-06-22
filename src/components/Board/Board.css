@@ -1,10 +1,38 @@
 .board {
+  --gap: 12px;
   display: grid;
-  grid-template-columns: repeat(4, 20vmin);
-  grid-template-rows: repeat(4, 20vmin);
-  gap: 1vmin;
-  padding: 1vmin;
-  background-color: #eee;
-  border-radius: 1vmin;
+  grid-template-columns: repeat(4, 87px);
+  grid-template-rows: repeat(4, 87px);
+  gap: var(--gap);
+  padding: var(--gap);
+  background-color: #57407C;
+  border-radius: 10px;
   position: relative;
+  animation: show 200ms ease-in-out;
+}
+
+.over {
+  --gap: 15px;
+  width: calc(4 * (87px + var(--gap)));
+  height: calc(4 * (87px + var(--gap)));
+  border-radius: 10px;
+  background: var(--image);
+  background-size: cover;
+  position: relative;
+  animation: show 200ms ease-in-out;
+}
+
+@keyframes show {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+}
+}
+
+.over img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  cursor: pointer;
 }

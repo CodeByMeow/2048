@@ -1,0 +1,46 @@
+.header {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #57407C;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  color: #ffffff;
+}
+
+.header .title {
+  padding: 20px;
+  font-size: 2.5em;
+}
+
+.header .score {
+  padding: 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  font-size: 1.5em;
+  position: relative;
+}
+
+.score .addition {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  animation: fadeDown 900ms ease-out;
+  visibility: hidden;
+}
+
+@keyframes fadeDown {
+   0% {
+      opacity: 0;
+      transform: translateY(0);
+   }
+   100% {
+      opacity: 1;
+      transform: translateY(-20px);
+      visibility: visible;
+   }
+}

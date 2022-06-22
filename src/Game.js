@@ -9,6 +9,8 @@ class Game {
       ArrowRight: "right",
     };
     this.callbacks = {};
+    this.won = false;
+    this.over = false;
   }
 
   start() {
@@ -76,29 +78,50 @@ class Game {
 
   respond(step) {
     if (this.dispatch(step)) {
-      
-      this.cells.forEach(cell => cell.mergeTiles());
-
-      this.addNew()
+      let score = 0;
+      this.cells.forEach(cell => score += cell.mergeTiles());
+      this.addNew();
       this.tiles = this.getTiles();
+      this.score += score;
+      this.callbacks['addition'] && this.callbacks['addition'](score);
+      if (this.isWon()) this.callbacks['won'] && this.callbacks['won']();
+      if (this.isOver()) this.callbacks['over'] && this.callbacks['over']();
+
       return true;
     }
 
     return false;
   }
 
+  largestValue() {
+    const tileValues = this.getTiles().map(cell => cell.getTile().value);
+    return Math.max(...tileValues);
+  }
+
+  isWon() {
+    return this.largestValue() === 2048;
+  }
+
+  isOver() {
+    return (!this.canMoveUp() && !this.canMoveDown() && !this.canMoveLeft() && !this.canMoveRight());
+  }
+
   dispatch(step) {
     switch (step) {
       case "up":
+        if (!this.canMoveUp()) return false;
         this.up();
         return true;
       case "down":
+        if (!this.canMoveDown()) return false;
         this.down();
         return true;
       case "left":
+        if (!this.canMoveLeft()) return false;
         this.left();
         return true;
       case "right":
+        if (!this.canMoveRight()) return false;
         this.right();
         return true;
       default:
@@ -130,7 +153,7 @@ class Game {
         let lastValidCell;
         for (let j = i - 1; j >= 0; j--) {
           const moveToCell = group[j];
-          if (!moveToCell.canAccept(cell.tile)) {
+          if (!moveToCell.canAccept(cell.getTile())) {
             break;
           }
 
@@ -143,9 +166,36 @@ class Game {
           } else {
             lastValidCell.setTile(cell.getTile());
           }
-          cell.tile = null
+          cell.setTile(null)
         }
       }
+    })
+  }
+
+  canMoveUp() {
+    return this.canMove(this.cellByCol());
+  }
+
+  canMoveDown() {
+    return this.canMove(this.cellByCol().map(col => [...col].reverse()));
+  }
+
+  canMoveLeft() {
+    return this.canMove(this.cellByRow());
+  }
+
+  canMoveRight() {
+    return this.canMove(this.cellByRow().map(row => [...row].reverse()));
+  }
+
+  canMove(cells) {
+    return cells.some(group => {
+      return group.some((cell, index) => {
+        if (index === 0) return false;
+        if (cell.getTile() == null) return false;
+        const moveToCell = group[index - 1];
+        return moveToCell.canAccept(cell.getTile());
+      })
     })
   }
 }
@@ -188,13 +238,16 @@ class Cell {
   }
 
   mergeTiles() {
-    if (this.tile == null || this.mergeTile == null) return;
+    if (this.tile == null || this.mergeTile == null) return 0;
+    const addition = this.mergeTile.value;
     this.tile.value = this.tile.value + this.mergeTile.value;
     this.mergeTile = null;
+
+    return addition;
   }
 }
 
-export class Tile {
+class Tile {
   constructor(value = Math.random() > 0.5 ? 4 : 2) {
     this.value = value;
   }
