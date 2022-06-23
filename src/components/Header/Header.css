@@ -33,7 +33,7 @@
 
 .score .addition {
   position: absolute;
-  right: 15px;
+  right: 30px;
   top: 0px;
   animation: fadeDown 900ms ease-out;
   visibility: hidden;

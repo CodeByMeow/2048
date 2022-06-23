@@ -277,6 +277,7 @@ class Tile {
 class Storage {
   constructor(game) {
     this.game = game;
+    this.clearRestore();
   }
 
   storageState() {
@@ -291,7 +292,11 @@ class Storage {
   }
 
   loadRestore() {
-    return this.restore = JSON.parse(sessionStorage.getItem('restore'));
+    return JSON.parse(sessionStorage.getItem('restore'));
+  }
+
+  clearRestore() {
+    sessionStorage.removeItem('restore');
   }
 
   updateToHistory(score) {

@@ -70,7 +70,8 @@ class App extends Component {
       won: false,
       over: false,
       score: 0,
-      history: game.loadHistory(),
+      history: game.storage.loadHistory(),
+      step: null,
     })
   }
 
