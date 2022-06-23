@@ -219,6 +219,21 @@ class Game {
       })
     })
   }
+
+  shuffle() {
+    const cells = this.getTiles();
+    let currentIndex = cells.length, randomIndex;
+
+    while(currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      //Swap 
+      [cells[currentIndex].tile.value, cells[randomIndex].tile.value] = [cells[randomIndex].tile.value, cells[currentIndex].tile.value];
+    }
+
+    return cells;
+  }
 }
 
 class Cell {

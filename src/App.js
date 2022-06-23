@@ -92,13 +92,22 @@ class App extends Component {
     }
   }
 
+  shuffle = () => {
+    if (!this.state.won && !this.state.over) {
+      game.shuffle();
+      this.setState({
+        tiles: game.getTiles(),
+      })
+    }
+  }
+
   render() {
     const { cells, tiles, won, over, score, addition, history } = this.state;
     return (
       <div className='container'>
         <div className='game-board'>
           <Header score={score} addition={addition} tryAgain={this.tryAgain} />
-          <Helper backStep={this.backStep} />
+          <Helper backStep={this.backStep} shuffle={this.shuffle} />
           <Board cells={cells} tiles={tiles} won={won} over={over} tryAgain={this.tryAgain} />
         </div>
         <div className='sidebar'>

@@ -9,7 +9,7 @@
   align-items: center;
 }
 
-.helper .back-step {
+.helper .back-step, .helper .shuffle {
   border: none;
   color: #ffffff;
   background-color: #3D2963;
@@ -19,4 +19,11 @@
   font-size: 1.2em;
   font-weight: bold;
   border-radius: inherit;
+  transition: background 300ms ease-in-out;
+}
+
+.helper .back-step:hover,
+.helper .shuffle:hover {
+  background-color: #eee;
+  color: #3D2963;
 }
