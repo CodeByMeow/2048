@@ -4,6 +4,7 @@ import Board from './components/Board';
 import Modal from './components/Modal';
 import Header from './components/Header';
 import History from './components/History';
+import Helper from './components/Helper';
 
 game.start();
 class App extends Component {
@@ -15,7 +16,8 @@ class App extends Component {
     won: false,
     over: false,
     addition: 0,
-    history: game.history,
+    history: game.storage.loadHistory(),
+    step: game.storage.loadRestore(),
   }
 
   componentDidMount = () => {
@@ -25,15 +27,15 @@ class App extends Component {
       score: game.score,
       addition: score,
     }));
-    
+
     game.addCallback('won', (score) => {
-      game.updateToHistory(score);
-      this.setState({ won: true, history: game.loadHistory() });
+      game.storage.updateToHistory(score);
+      this.setState({ won: true, history: game.storage.loadHistory() });
     });
-    
+
     game.addCallback('over', (score) => {
-      game.updateToHistory(score);
-      this.setState({ over: true, history: game.loadHistory() });
+      game.storage.updateToHistory(score);
+      this.setState({ over: true, history: game.storage.loadHistory() });
     });
   }
 
@@ -56,6 +58,7 @@ class App extends Component {
     this.setState({
       cells: game.cells,
       tiles: game.tiles,
+      step: game.storage.loadRestore(),
     })
   }
 
@@ -71,16 +74,34 @@ class App extends Component {
     })
   }
 
+  backStep = () => {
+    if (this.state.step && !this.state.won && !this.state.over) {
+      const { cells, tiles, score, addition } = this.state.step;
+      game.cells = game.bindCell(cells);
+      game.tiles = tiles;
+      game.score = score;
+      game.addition = addition;
+
+      this.setState({
+        cells: cells,
+        tiles: tiles,
+        score: score,
+        addition: addition,
+      })
+    }
+  }
+
   render() {
     const { cells, tiles, won, over, score, addition, history } = this.state;
     return (
       <div className='container'>
         <div className='game-board'>
-          <Header score={score} addition={addition} />
+          <Header score={score} addition={addition} tryAgain={this.tryAgain} />
+          <Helper backStep={this.backStep} />
           <Board cells={cells} tiles={tiles} won={won} over={over} tryAgain={this.tryAgain} />
         </div>
         <div className='sidebar'>
-          <History history = {history} />
+          <History history={history} />
         </div>
         {won && <Modal message="You won !!!" tryAgain={this.tryAgain} />}
       </div>

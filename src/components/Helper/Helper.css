@@ -1,0 +1,22 @@
+.helper {
+  width: 100%;
+  height: 50px;
+  background-color: #57407C;
+  margin: 5px 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.helper .back-step {
+  border: none;
+  color: #ffffff;
+  background-color: #3D2963;
+  outline: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-radius: inherit;
+}

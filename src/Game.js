@@ -12,7 +12,8 @@ class Game {
     this.won = false;
     this.over = false;
     this.score = 0;
-    this.history = [];
+    this.storage = null;
+    this.addition = 0;
   }
 
   start() {
@@ -37,7 +38,19 @@ class Game {
     this.won = false;
     this.over = false;
     this.score = 0;
-    this.history = this.loadHistory();
+    this.storage = new Storage(this);
+  }
+
+  bindCell(cells) {
+    return cells.map(cell => {
+      const el = new Cell(
+        cell.x,
+        cell.y
+      );
+      el.setTile(cell.tile);
+
+      return el;
+    })
   }
 
   emptyCell() {
@@ -83,12 +96,14 @@ class Game {
   }
 
   respond(step) {
+    this.storage.storageState();
     if (this.dispatch(step)) {
       let score = 0;
       this.cells.forEach(cell => score += cell.mergeTiles());
       this.addNew();
       this.tiles = this.getTiles();
       this.score += score;
+      this.addition = score;
       this.callbacks['addition'] && this.callbacks['addition'](score);
       if (this.isWon()) this.callbacks['won'] && this.callbacks['won'](this.score);
       if (this.isOver()) this.callbacks['over'] && this.callbacks['over'](this.score);
@@ -186,18 +201,6 @@ class Game {
     return this.canMove(this.cellByCol().map(col => [...col].reverse()));
   }
 
-  updateToHistory(score) {
-    const date = new Date();
-    const timeGameOver = date.toLocaleString();
-    const data = JSON.parse(localStorage.getItem("history")) || [];
-    data.push({time: timeGameOver, score: score});
-    localStorage.setItem('history', JSON.stringify(data));
-  }
-
-  loadHistory() {
-    return JSON.parse(localStorage.getItem('history')) || [];
-  }
-
   canMoveLeft() {
     return this.canMove(this.cellByRow());
   }
@@ -269,6 +272,40 @@ class Tile {
   constructor(value = Math.random() > 0.5 ? 4 : 2) {
     this.value = value;
   }
+}
+
+class Storage {
+  constructor(game) {
+    this.game = game;
+  }
+
+  storageState() {
+    const data = JSON.stringify({
+      cells: this.game.cells,
+      tiles: this.game.tiles,
+      score: this.game.score,
+      addition: this.game.addition,
+    });
+
+    sessionStorage.setItem('restore', data);
+  }
+
+  loadRestore() {
+    return this.restore = JSON.parse(sessionStorage.getItem('restore'));
+  }
+
+  updateToHistory(score) {
+    const date = new Date();
+    const timeGameOver = date.toLocaleString();
+    const data = JSON.parse(localStorage.getItem("history")) || [];
+    data.push({ time: timeGameOver, score: score });
+    localStorage.setItem('history', JSON.stringify(data));
+  }
+
+  loadHistory() {
+    return JSON.parse(localStorage.getItem('history')) || [];
+  }
+
 }
 
 export default new Game;
